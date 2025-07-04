@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PHAL TECH oferece consultoria em TI, desenvolvimento de software, suporte técnico, segurança da informação e mais. Transforme seu negócio com nossas soluções tecnológicas.">
+    <meta name="keywords" content="consultoria em TI, desenvolvimento de software, suporte técnico, segurança da informação, cloud computing, otimização de sistemas, redes, infraestrutura, backup, recuperação de dados, PHAL TECH">
+    <meta name="author" content="PHAL TECH">
+    <meta name="robots" content="index, follow">
+    <title>PHAL TECH - Soluções em Tecnologia</title>
+    <!-- Inclui Tailwind CSS para estilização fácil e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para ícones de redes sociais -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "PHAL TECH",
+      "url": "https://www.phaltech.com",
+      "logo": "https://placehold.co/150x50/000000/FFFFFF?text=PHAL+TECH+Logo",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+55-11-95238-7921",
+        "contactType": "Customer Service"
+      }
+    }
+    </script>
+    <style>
+        /* Default (Light) Theme Variables */
+        :root {
+            --bg-body: #000000;
+            --bg-container: #ffffff;
+            --text-color-primary: #000000;
+            --text-color-secondary: #6b7280; /* gray-600 */
+            --border-color: #d1d5db; /* gray-300 */
+            --input-bg: #ffffff;
+            --card-bg: #f9fafb; /* gray-50 */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-color-light: rgba(0, 0, 0, 0.06);
+            --highlight-bg: rgba(0, 179, 134, 0.3);
+            --metallic-green: #00b386;
+            --metallic-green-hover: #00805c;
+        }
+
+        /* Dark Theme Variables */
+        body.dark-theme {
+            --bg-body: #1a202c; /* dark gray/blue */
+            --bg-container: #2d3748; /* darker gray/blue */
+            --text-color-primary: #FFFFFF; /* Alterado para branco puro */
+            --text-color-secondary: #a0aec0; /* medium gray */
+            --border-color: #4a5568; /* dark gray */
+            --input-bg: #2d3748;
+            --card-bg: #2d3748; /* darker gray/blue */
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --shadow-color-light: rgba(0, 0, 0, 0.2);
+            --highlight-bg: rgba(0, 179, 134, 0.5); /* slightly darker highlight */
+            --metallic-green: #00e6a8; /* brighter green for dark theme */
+            --metallic-green-hover: #00b386;
+        }
+
+        /* Define a fonte Inter para todo o corpo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body); /* Usando variável de tema */
+            margin: 0;
+            padding: 0; /* Remove padding do body para encostar no topo */
+            box-sizing: border-box; /* Inclui padding na largura total */
+        }
+
+        /* Estilo para a cor verde metálico da letra 'C' e da lupa */
+        .metallic-green {
+            color: var(--metallic-green); /* Usando variável de tema */
+        }
+
+        /* Garante que o contêiner principal seja responsivo e tenha a forma original */
+        .tumb-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto; /* Centraliza o cartão horizontalmente */
+            display: flex;
+            flex-direction: column; /* Alinha os itens em coluna */
+            align-items: center; /* Centraliza os itens horizontalmente na coluna */
+            padding: 20px 24px; /* Ajusta o padding sem o botão inferior */
+            background-color: var(--bg-container); /* Usando variável de tema */
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color-light); /* Usando variável de tema */
+            border-radius: 0 0 1.5rem 1.5rem; /* Mantém os cantos arredondados na parte inferior */
+            position: relative; /* Para posicionar o dropdown */
+            z-index: 10; /* Garante que a tumb fique acima de outros conteúdos */
+            min-height: 120px; /* Garante altura suficiente para o conteúdo */
+        }
+
+        /* Contêiner para a linha superior (logo, pesquisa, calendário) */
+        .tumb-top-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%; /* Ocupa a largura total do tumb-container */
+            flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+        }
+
+        /* Estilo para o campo de pesquisa */
+        .search-container {
+            flex-grow: 1; /* Permite que a caixa de pesquisa cresça para ocupar o espaço disponível */
+            margin: 0 20px; /* Adiciona margem lateral para separar dos outros elementos */
+            max-width: 400px; /* Limita a largura da caixa de pesquisa para não ocupar todo o espaço */
+            display: flex; /* Adicionado para alinhar input e botão */
+            align-items: center; /* Alinha verticalmente */
+            gap: 8px; /* Espaçamento entre input e botão */
+        }
+
+        .search-input {
+            padding-right: 1rem; /* Ajustado padding para o botão ao lado */
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transição suave */
+            border-color: var(--border-color); /* Usando variável de tema */
+            background-color: var(--input-bg); /* Usando variável de tema */
+            color: var(--text-color-primary); /* Usando variável de tema */
+            flex-grow: 1; /* Permite que o input preencha o espaço */
+        }
+
+        .search-input:hover {
+            border-color: var(--metallic-green); /* Usando variável de tema */
+            box-shadow: 0 0 0 3px var(--highlight-bg); /* Usando variável de tema */
+        }
+
+        /* Estilo para o botão de pesquisa (lupa) */
+        .search-button {
+            background-color: var(--metallic-green);
+            color: white;
+            padding: 10px 12px; /* Ajustado padding */
+            border-radius: 0.5rem; /* Cantos arredondados */
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-button:hover {
+            background-color: var(--metallic-green-hover);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .search-button svg {
+            color: white; /* Cor da lupa branca no botão */
+            width: 20px; /* Tamanho do ícone */
+            height: 20px; /* Tamanho do ícone */
+        }
+
+
+        /* Animação para o botão PHAL TECH */
+        @keyframes riseAndExpand {
+            from {
+                transform: translateY(0) scale(1);
+                box-shadow: 0 0 0 rgba(0,0,0,0); /* Sombra inicial transparente */
+            }
+            to {
+                transform: translateY(-5px) scale(1.02); /* Sobe um pouco e expande ligeiramente */
+                box-shadow: 0 8px 15px var(--shadow-color); /* Usando variável de tema */
+            }
+        }
+
+        /* Aplica a animação ao passar o mouse sobre o link PHAL TECH */
+        .phal-tech-link:hover {
+            animation: riseAndExpand 0.3s forwards; /* Animação de 0.3s, mantém o estado final */
+        }
+
+        /* Estilos para o botão de menu cascata */
+        .cascade-menu-wrapper {
+            position: relative; /* Para posicionar o dropdown */
+            z-index: 12; /* Garante que esteja acima de outros elementos */
+        }
+
+        .cascade-menu-button {
+            background-color: var(--metallic-green); /* Verde metálico */
+            color: white;
+            padding: 8px 12px; /* Padding menor */
+            border-radius: 9999px; /* Totalmente arredondado */
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 4px var(--shadow-color); /* Usando variável de tema */
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cascade-menu-button:hover {
+            background-color: var(--metallic-green-hover); /* Usando variável de tema */
+            box-shadow: 0 4px 8px var(--shadow-color); /* Usando variável de tema */
+        }
+
+        /* Estilo para a seta do botão de cascata - AGORA PRETA */
+        .cascade-menu-button svg {
+            stroke: black; /* Cor da seta para preto */
+        }
+
+        /* Estilo para o conteúdo do dropdown cascata */
+        .cascade-dropdown-content {
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s ease-out;
+
+            position: absolute;
+            background-color: var(--bg-container); /* Usando variável de tema */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px var(--shadow-color); /* Usando variável de tema */
+            z-index: 1; /* Relativo ao seu wrapper */
+            border-radius: 0.75rem;
+            top: 100%; /* Posiciona abaixo do botão */
+            left: 0; /* Alinha à esquerda do botão */
+            margin-top: 5px; /* Pequeno espaçamento entre botão e dropdown */
+            overflow: hidden;
+        }
+
+        .cascade-dropdown-content.show {
+            max-height: 200px; /* Altura máxima para mostrar o conteúdo */
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cascade-dropdown-content a {
+            color: var(--text-color-primary); /* Usando variável de tema */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            transition: background-color 0.2s ease;
+        }
+
+        .cascade-dropdown-content a:hover {
+            background-color: var(--card-bg); /* Usando variável de tema */
+            color: var(--metallic-green); /* Usando variável de tema */
+        }
+
+        /* Estilos para as novas páginas de conteúdo (Serviços, Sobre Nós e Contatos) */
+        .hidden-content-page {
+            display: none;
+        }
+
+        .show-content-page {
+            display: block;
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--bg-container); /* Usando variável de tema */
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color-light); /* Usando variável de tema */
+        }
+
+        /* Estilo para os títulos e parágrafos das páginas de conteúdo */
+        main section h2, main section h3 {
+            color: var(--text-color-primary); /* Usando variável de tema */
+        }
+        main section p, main section ul, main section li {
+            color: var(--text-color-secondary); /* Usando variável de tema */
+        }
+        main section .bg-gray-50 { /* Para os cartões internos de serviço/contato/sobre */
+            background-color: var(--card-bg); /* Usando variável de tema */
+            box-shadow: 0 2px 4px var(--shadow-color-light); /* Usando variável de tema */
+        }
+        main section .bg-gray-50 h3 {
+            color: var(--text-color-primary); /* Usando variável de tema */
+        }
+        main section .bg-gray-50 p {
+            color: var(--text-color-secondary); /* Usando variável de tema */
+        }
+
+        /* Estilo para o formulário de contato */
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color); /* Usando variável de tema */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-size: 1rem;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            background-color: var(--input-bg); /* Usando variável de tema */
+            color: var(--text-color-primary); /* Usando variável de tema */
+        }
+
+        .contact-form input[type="text"]:focus,
+        .contact-form input[type="email"]:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--metallic-green); /* Usando variável de tema */
+            box-shadow: 0 0 0 3px var(--highlight-bg); /* Usando variável de tema */
+        }
+
+        .contact-form button[type="submit"] {
+            background-color: var(--metallic-green); /* Usando variável de tema */
+            color: white;
+            padding: 12px 24px;
+            border-radius: 0.5rem; /* rounded-lg */
+            font-weight: 600; /* font-semibold */
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .contact-form button[type="submit"]:hover {
+            background-color: var(--metallic-green-hover); /* Usando variável de tema */
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color-light); /* Usando variável de tema */
+        }
+
+        /* Estilo para os botões de redes sociais */
+        .social-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 12px 24px;
+            background-color: var(--metallic-green); /* Usando variável de tema */
+            color: white;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 4px var(--shadow-color); /* Usando variável de tema */
+        }
+
+        .social-button:hover {
+            background-color: var(--metallic-green-hover); /* Usando variável de tema */
+            box-shadow: 0 4px 8px var(--shadow-color); /* Usando variável de tema */
+        }
+
+        /* Estilo para o destaque da pesquisa */
+        .highlight {
+            background-color: var(--highlight-bg); /* Usando variável de tema */
+            border-radius: 0.2rem;
+            padding: 0 2px;
+        }
+
+        /* Estilo para o rodapé */
+        footer {
+            color: var(--text-color-secondary); /* Usando variável de tema */
+        }
+
+        /* Estilo para os botões de tema */
+        .theme-switcher button {
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            border: 1px solid var(--border-color); /* Adicionado borda para consistência */
+            background-color: var(--input-bg); /* Fundo padrão */
+            display: flex; /* Para alinhar o SVG */
+            align-items: center; /* Centraliza verticalmente */
+            justify-content: center; /* Centraliza horizontalmente */
+            padding: 8px; /* Ajusta o padding para ícones */
+        }
+
+        .theme-switcher button svg {
+            width: 24px; /* Ajuste o tamanho do ícone */
+            height: 24px; /* Ajuste o tamanho do ícone */
+            color: var(--text-color-primary); /* Cor do ícone */
+        }
+
+        /* Estilo para o botão de tema ativo */
+        .theme-switcher button.active {
+            background-color: var(--metallic-green);
+            border-color: var(--metallic-green);
+        }
+
+        .theme-switcher button.active svg {
+            color: white; /* Ícone branco quando o botão está ativo */
+        }
+
+        /* Ajustes para telas menores */
+        @media (max-width: 768px) {
+            .tumb-container {
+                padding: 16px; /* Ajusta padding para telas menores */
+            }
+            .tumb-top-row {
+                flex-direction: column; /* Empilha os itens em coluna */
+                align-items: flex-start; /* Alinha à esquerda */
+            }
+            .search-container {
+                width: 100%;
+                margin: 20px 0; /* Ajusta margem vertical em telas menores */
+                max-width: none; /* Remove limite de largura em telas menores */
+            }
+            .tumb-top-row > .text-right { /* Ajusta o calendário em telas menores */
+                align-self: flex-start; /* Alinha o calendário à esquerda */
+                margin-top: 10px; /* Adiciona um pouco de espaço acima do calendário */
+            }
+            .show-content-page {
+                padding: 16px; /* Ajusta padding para telas menores */
+                margin: 15px auto; /* Ajusta margem para telas menores */
+            }
+            .social-button {
+                justify-content: center; /* Centraliza o conteúdo dos botões sociais */
+            }
+            /* Ajustes para o novo layout em telas pequenas */
+            .header-left-section {
+                flex-direction: column; /* Empilha logo e botões em coluna */
+                align-items: center; /* Centraliza horizontalmente */
+                width: 100%;
+            }
+            .header-left-section > div { /* Para o container do menu cascata e tema */
+                margin-top: 8px; /* Espaçamento entre logo e botões */
+                justify-content: center; /* Centraliza os botões */
+                width: 100%;
+            }
+            .search-container {
+                flex-direction: column; /* Empilha input e botão de pesquisa em telas pequenas */
+                align-items: center;
+                width: 100%;
+            }
+            .search-input {
+                width: 100%; /* Input ocupa largura total */
+                margin-bottom: 8px; /* Espaçamento entre input e botão */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="tumb-container">
+        <!-- Linha superior da TUMB (Logo, Pesquisa, Calendário) -->
+        <div class="tumb-top-row">
+            <!-- Left Section: Logo -->
+            <a href="#top" id="phalTechLink" class="text-3xl font-bold text-black transition-colors duration-200 whitespace-nowrap phal-tech-link"
+               aria-label="Voltar para o início">
+                PHAL TE<span class="metallic-green">C</span>H
+            </a>
+
+            <!-- Center Section: Search Bar and Button -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Pesquisar conteúdo..."
+                       class="search-input p-3 pl-4 rounded-xl border-2 focus:outline-none focus:border-emerald-500 transition-colors duration-200 shadow-sm"
+                       aria-label="Pesquisar conteúdo no site">
+                <button id="searchButton" class="search-button" aria-label="Botão de Pesquisa">
+                    <!-- Ícone de Lupa em SVG -->
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Right Section: Date and Time -->
+            <div class="text-right text-sm whitespace-nowrap text-gray-600">
+                <div id="current-date" class="font-semibold"></div>
+                <div id="current-time" class="text-xs"></div>
+            </div>
+        </div>
+        <!-- Second Row for Cascade Menu and Theme Switcher -->
+        <div class="w-full flex justify-between items-center mt-4 flex-wrap">
+            <!-- Container for cascade menu and theme switcher -->
+            <div class="flex items-center gap-2">
+                <!-- Cascade Menu Button -->
+                <div class="relative">
+                    <button id="cascadeMenuButton" class="cascade-menu-button" aria-expanded="false" aria-controls="cascadeDropdown">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <nav id="cascadeDropdown" class="cascade-dropdown-content" role="menu">
+                        <a href="#" id="cascadeServicesLink" role="menuitem">Nossos Serviços</a>
+                        <a href="#" id="cascadeAboutUsLink" role="menuitem">Sobre Nós</a>
+                        <a href="#" id="cascadeContactLink" role="menuitem">Contatos</a>
+                    </nav>
+                </div>
+                <!-- Theme Switcher Buttons -->
+                <div class="theme-switcher flex gap-2">
+                    <button id="lightThemeBtn" class="px-3 py-1 rounded-full text-sm font-semibold border" aria-label="Ativar Tema Claro">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.106a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.06l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5h2.25a.75.75 0 0 1 .75.75ZM17.243 18.894a.75.75 0 0 0 1.06 1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18.75a.75.75 0 0 1-.75.75v2.25a.75.75 0 0 1 1.5 0v-2.25a.75.75 0 0 1-.75-.75ZM5.56 17.243a.75.75 0 0 0-1.06-1.06l-1.59 1.591a.75.75 0 0 0 1.06 1.06l1.591-1.59ZM3 12a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.106 5.56a.75.75 0 0 0 1.06-1.061l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.591 1.59Z" />
+                        </svg>
+                    </button>
+                    <button id="darkThemeBtn" class="px-3 py-1 rounded-full text-sm font-semibold border" aria-label="Ativar Tema Escuro">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .482.832l-1.096 4.415c.811.22 1.58.583 2.272 1.068a7.046 7.046 0 0 0 3.293 1.834 7.046 7.046 0 0 1 .91-2.923c.27-.602.864-1.035 1.571-1.171.493-.094.997.061 1.42.368A7.012 7.012 0 0 0 21.75 12a7.002 7.002 0 0 1-13.565 3.197c-.014.024-.029.049-.042.074a.75.75 0 1 1-1.121-.796 5.485 5.485 0 0 0 2.222-1.084 5.5 5.5 0 0 0 1.565-3.048 5.508 5.508 0 0 0-.256-1.745l-1.096 4.415a.75.75 0 0 1-1.401-.345l-1.096-4.415a.75.75 0 0 1 .832-.482ZM12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM4.922 6.106a.75.75 0 1 0 1.06 1.06l1.591-1.59a.75.75 0 1 0-1.06-1.06l-1.591 1.59ZM18.75 12a.75.75 0 0 1 .75-.75h2.25a.75.75 0 0 1 0 1.5h-2.25a.75.75 0 0 1-.75-.75ZM17.243 18.894a.75.75 0 0 0 1.06 1.06l1.591-1.59a.75.75 0 0 0-1.06-1.06l-1.591 1.59ZM12 18.75a.75.75 0 0 1-.75.75v2.25a.75.75 0 0 1 1.5 0v-2.25a.75.75 0 0 1-.75-.75ZM5.56 17.243a.75.75 0 0 0-1.06-1.06l-1.59 1.591a.75.75 0 0 0 1.06 1.06l1.591-1.59ZM3 12a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75Z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Página de Serviços (inicialmente oculta) -->
+        <section id="services-page" class="hidden-content-page">
+            <h2 class="text-4xl font-bold text-center mb-8">Nossos Serviços</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Serviço 1: Consultoria em TI -->
+                <div class="p-6 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold mb-2">Consultoria em TI</h3>
+                    <p>Oferecemos consultoria especializada para otimizar seus processos de TI, identificar oportunidades de melhoria e implementar soluções tecnológicas eficientes.</p>
+                </div>
+                <!-- Serviço 2: Desenvolvimento de Software -->
+                <div class="p-6 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold mb-2">Desenvolvimento de Software</h3>
+                    <p>Criamos softwares personalizados para web, mobile e desktop, atendendo às necessidades específicas do seu negócio com tecnologia de ponta.</p>
+                </div>
+                <!-- Serviço 3: Suporte Técnico -->
+                <div class="p-6 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold mb-2">Suporte Técnico</h3>
+                    <p>Disponibilizamos suporte técnico remoto e local para garantir o funcionamento contínuo dos seus sistemas e resolver problemas rapidamente.</p>
+                </div>
+                <!-- Serviço 4: Redes e Infraestrutura -->
+                <div class="p-6 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold mb-2">Redes e Infraestrutura</h3>
+                    <p>Projetamos, implementamos e gerenciamos redes e infraestruturas de TI robustas e seguras para sua empresa.</p>
+                </div>
+                <!-- Serviço 5: Segurança da Informação -->
+                <div class="p-6 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold mb-2">Segurança da Informação</h3>
+                    <p>Protegemos seus dados e sistemas contra ameaças cibernéticas com soluções avançadas de segurança da informação.</p>
+                </div>
+                <!-- Serviço 6: Backup e Recuperação de Dados -->
+                <div class="p-6 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold mb-2">Backup e Recuperação de Dados</h3>
+                    <p>Garanta a segurança dos seus dados com nossas soluções de backup e recuperação, minimizando riscos de perda de informações.</p>
+                </div>
+                <!-- Serviço 7: Cloud Computing -->
+                <div class="p-6 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold mb-2">Cloud Computing</h3>
+                    <p>Migre para a nuvem com segurança e eficiência, aproveitando os benefícios da computação em nuvem para seu negócio.</p>
+                </div>
+                <!-- Serviço 8: Otimização de Sistemas -->
+                <div class="p-6 rounded-lg shadow-sm">
+                    <h3 class="2xl font-semibold mb-2">Otimização de Sistemas</h3>
+                    <p>Melhoramos o desempenho e a eficiência dos seus sistemas existentes, garantindo que sua infraestrutura opere no máximo potencial.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Sobre Nós (inicialmente oculta) -->
+        <section id="about-us-page" class="hidden-content-page">
+            <h2 class="text-4xl font-bold text-center mb-8">Sobre Nós</h2>
+            <div class="p-6 rounded-lg shadow-sm">
+                <h3 class="text-2xl font-semibold mb-4">Nossa Missão</h3>
+                <p class="mb-4">Na PHAL TECH, nossa missão é impulsionar o sucesso de nossos clientes através de soluções tecnológicas inovadoras e eficientes. Acreditamos que a tecnologia, quando bem aplicada, pode transformar negócios e simplificar a vida das pessoas.</p>
+                <h3 class="text-2xl font-semibold mb-4">Nossa Visão</h3>
+                <p class="mb-4">Ser reconhecida como líder em soluções de TI, referência em inovação e excelência no atendimento, construindo parcerias duradouras baseadas na confiança e resultados.</p>
+                <h3 class="2xl font-semibold mb-4">Nossos Valores</h3>
+                <ul class="list-disc list-inside">
+                    <li>**Inovação:** Buscamos constantemente novas tecnologias e abordagens para oferecer as melhores soluções.</li>
+                    <li>**Qualidade:** Comprometimento com a entrega de serviços e produtos de alta qualidade.</li>
+                    <li>**Integridade:** Atuamos com ética, transparência e responsabilidade em todas as nossas relações.</li>
+                    <li>**Foco no Cliente:** Entender e superar as expectativas de nossos clientes é a nossa prioridade.</li>
+                    <li>**Colaboração:** Acreditamos no poder do trabalho em equipe e na troca de conhecimentos.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Página de Contatos (inicialmente oculta) -->
+        <section id="contact-page" class="hidden-content-page">
+            <h2 class="text-4xl font-bold text-center mb-8">Contatos</h2>
+            <div class="p-6 rounded-lg shadow-sm mb-8">
+                <h3 class="text-2xl font-semibold mb-4">Envie-nos uma Mensagem</h3>
+                <form class="contact-form" action="/submit-contact" method="POST" role="form" aria-labelledby="contact-form-heading">
+                    <h4 id="contact-form-heading" class="sr-only">Formulário de Contato</h4>
+                    <label for="contact-name" class="block text-sm font-bold mb-2">Seu Nome:</label>
+                    <input type="text" id="contact-name" name="name" placeholder="Seu Nome" required>
+
+                    <label for="contact-email" class="block text-sm font-bold mb-2">Seu E-mail:</label>
+                    <input type="email" id="contact-email" name="email" placeholder="Seu E-mail" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+
+                    <label for="contact-subject" class="block text-sm font-bold mb-2">Assunto:</label>
+                    <input type="text" id="contact-subject" name="subject" placeholder="Assunto" required>
+
+                    <label for="contact-message" class="block text-sm font-bold mb-2">Sua Mensagem:</label>
+                    <textarea id="contact-message" name="message" placeholder="Sua Mensagem" rows="5" required></textarea>
+
+                    <input type="text" name="honeypot" style="display: none;" aria-hidden="true">
+                    <button type="submit">Enviar Mensagem</button>
+                </form>
+            </div>
+
+            <div class="p-6 rounded-lg shadow-sm">
+                <h3 class="text-2xl font-semibold mb-4">Conecte-se Conosco</h3>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="https://www.instagram.com/phaltech_informatica/" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="Instagram da PHAL TECH">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61573097804524" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="Facebook da PHAL TECH">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </a>
+                    <a href="https://wa.me/5511952387921" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="WhatsApp da PHAL TECH">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="w-full py-8 text-center text-sm">
+        <p>&copy; 2025 PHAL TECH. Todos os direitos reservados.</p>
+    </footer>
+
+    <script defer>
+        // Função para atualizar a data e hora
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+
+            document.getElementById('current-date').textContent = now.toLocaleDateString('pt-BR', dateOptions);
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('pt-BR', timeOptions);
+        }
+
+        // Atualiza a data e hora a cada segundo
+        setInterval(updateDateTime, 1000);
+
+        // Chama a função uma vez ao carregar a página para exibir imediatamente
+        window.onload = updateDateTime;
+
+        // Lógica para exibir/ocultar as páginas de conteúdo
+        const servicesPage = document.getElementById('services-page');
+        const aboutUsPage = document.getElementById('about-us-page');
+        const contactPage = document.getElementById('contact-page');
+        const phalTechLink = document.getElementById('phalTechLink');
+        const cascadeMenuButton = document.getElementById('cascadeMenuButton');
+        const cascadeDropdown = document.getElementById('cascadeDropdown');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton'); // Novo botão de pesquisa
+
+        // Referências para os links dentro do dropdown cascata
+        const cascadeServicesLink = document.getElementById('cascadeServicesLink');
+        const cascadeAboutUsLink = document.getElementById('cascadeAboutUsLink');
+        const cascadeContactLink = document.getElementById('cascadeContactLink');
+
+        // Referências para os botões de tema
+        const lightThemeBtn = document.getElementById('lightThemeBtn');
+        const darkThemeBtn = document.getElementById('darkThemeBtn');
+
+        // Armazenar o HTML original das páginas APÓS o DOM estar carregado
+        let originalServicesHtml;
+        let originalAboutUsHtml;
+        let originalContactHtml;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            originalServicesHtml = servicesPage.innerHTML;
+            originalAboutUsHtml = aboutUsPage.innerHTML;
+            originalContactHtml = contactPage.innerHTML;
+
+            // Aplicar o tema salvo no localStorage ao carregar a página
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                darkThemeBtn.classList.add('active'); // Marca o botão escuro como ativo
+                lightThemeBtn.classList.remove('active'); // Garante que o claro não esteja ativo
+            } else {
+                document.body.classList.remove('dark-theme');
+                lightThemeBtn.classList.add('active'); // Marca o botão claro como ativo
+                darkThemeBtn.classList.remove('active'); // Garante que o escuro não esteja ativo
+            }
+        });
+
+        function hideAllContentPages() {
+            servicesPage.classList.remove('show-content-page');
+            servicesPage.classList.add('hidden-content-page');
+            aboutUsPage.classList.remove('show-content-page');
+            aboutUsPage.classList.add('hidden-content-page');
+            contactPage.classList.remove('show-content-page');
+            contactPage.classList.add('hidden-content-page');
+
+            // Restaurar o conteúdo original
+            servicesPage.innerHTML = originalServicesHtml;
+            aboutUsPage.innerHTML = originalAboutUsHtml;
+            contactPage.innerHTML = originalContactHtml;
+        }
+
+        function showContentPage(pageToShow) {
+            hideAllContentPages(); // Esconde todas as outras páginas e restaura o conteúdo original
+            cascadeDropdown.classList.remove('show'); // Esconde o dropdown cascata
+            searchInput.value = ''; // Limpa a caixa de pesquisa ao navegar
+
+            // Mostra a página desejada
+            pageToShow.classList.remove('hidden-content-page');
+            pageToShow.classList.add('show-content-page');
+        }
+
+        // Função para remover destaques (desembrulhar spans)
+        function removeHighlights(element) {
+            const highlights = element.querySelectorAll('span.highlight');
+            highlights.forEach(span => {
+                const parent = span.parentNode;
+                while (span.firstChild) {
+                    parent.insertBefore(span.firstChild, span);
+                }
+                parent.removeChild(span);
+            });
+        }
+
+        // Função para destacar o texto em um elemento DOM
+        function highlightTextInElement(element, searchTerm) {
+            if (!searchTerm) return;
+
+            const walker = document.createTreeWalker(
+                element,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+
+            let node;
+            const nodesToProcess = [];
+
+            // Coleta todos os nós de texto
+            while ((node = walker.nextNode())) {
+                nodesToProcess.push(node);
+            }
+
+            // Processa cada nó de texto
+            nodesToProcess.forEach(textNode => {
+                const parent = textNode.parentNode;
+                const text = textNode.nodeValue;
+                const lowerCaseText = text.toLowerCase();
+                const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+                let lastIndex = 0;
+                const fragment = document.createDocumentFragment();
+
+                let match;
+                const regex = new RegExp(lowerCaseSearchTerm, 'gi');
+
+                while ((match = regex.exec(text)) !== null) {
+                    // Adiciona texto antes da correspondência
+                    if (match.index > lastIndex) {
+                        fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+                    }
+
+                    // Adiciona o span destacado
+                    const span = document.createElement('span');
+                    span.className = 'highlight';
+                    span.textContent = match[0]; // Usa o caso original da correspondência
+                    fragment.appendChild(span);
+
+                    lastIndex = regex.lastIndex;
+                }
+
+                // Adiciona qualquer texto restante após a última correspondência
+                if (lastIndex < text.length) {
+                    fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+                }
+
+                // Substitui o nó de texto original pelo novo fragmento
+                if (fragment.hasChildNodes()) {
+                    parent.replaceChild(fragment, textNode);
+                }
+            });
+        }
+
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            // Primeiro, remove todos os destaques existentes de todas as páginas
+            removeHighlights(servicesPage);
+            removeHighlights(aboutUsPage);
+            removeHighlights(contactPage);
+
+            // Restaurar o conteúdo original antes de aplicar novos destaques
+            servicesPage.innerHTML = originalServicesHtml;
+            aboutUsPage.innerHTML = originalAboutUsHtml;
+            contactPage.innerHTML = originalContactHtml;
+
+            hideAllContentPages(); // Esconde todas as páginas de conteúdo primeiro
+            cascadeDropdown.classList.remove('show'); // Garante que o dropdown cascata esteja fechado durante a pesquisa
+
+            if (searchTerm === '') {
+                // Se o termo de pesquisa estiver vazio, apenas esconde todas as páginas e retorna
+                return;
+            }
+
+            let foundInAnyPage = false;
+
+            // Verifica e destaca a Página de Serviços
+            if (servicesPage.textContent.toLowerCase().includes(searchTerm)) {
+                highlightTextInElement(servicesPage, searchTerm);
+                servicesPage.classList.remove('hidden-content-page');
+                servicesPage.classList.add('show-content-page');
+                foundInAnyPage = true;
+            }
+
+            // Verifica e destaca a Página Sobre Nós
+            if (aboutUsPage.textContent.toLowerCase().includes(searchTerm)) {
+                highlightTextInElement(aboutUsPage, searchTerm);
+                aboutUsPage.classList.remove('hidden-content-page');
+                aboutUsPage.classList.add('show-content-page');
+                foundInAnyPage = true;
+            }
+
+            // Verifica e destaca a Página de Contatos
+            if (contactPage.textContent.toLowerCase().includes(searchTerm)) {
+                highlightTextInElement(contactPage, searchTerm);
+                contactPage.classList.remove('hidden-content-page');
+                contactPage.classList.add('show-content-page');
+                foundInAnyPage = true;
+            }
+
+            // Se nada foi encontrado, você pode optar por exibir uma mensagem ou manter tudo oculto
+            if (!foundInAnyPage && searchTerm !== '') {
+                // Opcional: exibir uma mensagem "Nenhum resultado encontrado"
+                // Por enquanto, apenas mantém as páginas ocultas
+            }
+        }
+
+        // Adiciona o event listener para o novo botão de pesquisa
+        searchButton.addEventListener('click', performSearch);
+
+        // Adiciona o event listener para a tecla Enter no campo de pesquisa
+        searchInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Event listeners para os links dentro do dropdown cascata
+        cascadeServicesLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Previne o comportamento padrão do link
+            showContentPage(servicesPage);
+        });
+
+        cascadeAboutUsLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Previne o comportamento padrão do link
+            showContentPage(aboutUsPage);
+        });
+
+        cascadeContactLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Previne o comportamento padrão do link
+            showContentPage(contactPage);
+        });
+
+        // Lógica para o novo botão de menu cascata
+        cascadeMenuButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // Impede que o clique se propague para o window e feche o dropdown imediatamente
+            cascadeDropdown.classList.toggle('show');
+            searchInput.value = ''; // Limpa a caixa de pesquisa ao abrir o menu cascata
+        });
+
+        // Adiciona a funcionalidade de voltar ao topo para o link PHAL TECH
+        phalTechLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Previne o comportamento padrão do link
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Rolagem suave
+            });
+            hideAllContentPages(); // Esconde todas as páginas de conteúdo
+            cascadeDropdown.classList.remove('show'); // Esconde o dropdown cascata
+            searchInput.value = ''; // Limpa a caixa de pesquisa ao voltar para o topo
+        });
+
+        // Fecha o dropdown cascata se o usuário clicar fora dele
+        window.addEventListener("click", function(event) {
+            if (!event.target.matches('#cascadeMenuButton') && !event.target.closest('.cascade-menu-wrapper') && !event.target.closest('.theme-switcher') && !event.target.matches('#searchButton') && !event.target.closest('.search-container')) {
+                if (cascadeDropdown.classList.contains('show')) {
+                    cascadeDropdown.classList.remove('show');
+                }
+            }
+        });
+
+        // Lógica para os botões de tema
+        lightThemeBtn.addEventListener('click', () => {
+            document.body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+            lightThemeBtn.classList.add('active'); // Adiciona a classe 'active'
+            darkThemeBtn.classList.remove('active'); // Remove a classe 'active' do outro botão
+        });
+
+        darkThemeBtn.addEventListener('click', () => {
+            document.body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
+            darkThemeBtn.classList.add('active'); // Adiciona a classe 'active'
+            lightThemeBtn.classList.remove('active'); // Remove a classe 'active' do outro botão
+        });
+    </script>
+    <!-- Google Analytics (Placeholder) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-X"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-XXXXX-X');
+    </script>
+</body>
+</html>
