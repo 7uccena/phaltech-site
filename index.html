@@ -12,6 +12,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome para ícones de redes sociais -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -29,7 +30,7 @@
     <style>
         /* Default (Light) Theme Variables */
         :root {
-            --bg-body: #000000;
+            --bg-body: #f0f0f0; /* Fundo padrão para o tema claro */
             --bg-container: #ffffff;
             --text-color-primary: #000000;
             --text-color-secondary: #6b7280; /* gray-600 */
@@ -41,6 +42,7 @@
             --highlight-bg: rgba(0, 179, 134, 0.3);
             --metallic-green: #00b386;
             --metallic-green-hover: #00805c;
+            --loader-bg: rgba(240, 240, 240, 1); /* Fundo do loader para tema claro, agora opaco */
         }
 
         /* Dark Theme Variables */
@@ -57,6 +59,7 @@
             --highlight-bg: rgba(0, 179, 134, 0.5); /* slightly darker highlight */
             --metallic-green: #00e6a8; /* brighter green for dark theme */
             --metallic-green-hover: #00b386;
+            --loader-bg: rgba(26, 32, 44, 1); /* Fundo do loader para tema escuro, agora opaco */
         }
 
         /* Define a fonte Inter para todo o corpo */
@@ -66,6 +69,105 @@
             margin: 0;
             padding: 0; /* Remove padding do body para encostar no topo */
             box-sizing: border-box; /* Inclui padding na largura total */
+            transition: background-color 0.5s ease; /* Transição suave para a mudança de tema */
+        }
+
+        /* Estilos para o body quando o loader está ativo */
+        body.loading {
+            overflow: hidden; /* Impede a rolagem */
+            height: 100vh; /* Ocupa a altura total da viewport */
+            /* REMOVIDO: visibility: hidden; e opacity: 0; daqui */
+            /* A transição do loader agora gerencia o que é visível */
+        }
+
+        /* Estilos para o container da animação de carregamento */
+        .loader-overlay {
+            position: fixed; /* Fixa na tela */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--loader-bg); /* Fundo do loader usando variável de tema */
+            display: flex;
+            flex-direction: column; /* Para empilhar o spinner e a logo */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Garante que fique acima de outros elementos */
+            opacity: 0; /* Começa invisível */
+            visibility: hidden; /* Esconde o elemento */
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out; /* Transição suave para esconder */
+        }
+
+        /* Torna o loader visível quando o body tem a classe 'loading' */
+        body.loading .loader-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Estilo para a logo PHAL TECH */
+        .phal-tech-logo {
+            font-size: 3rem; /* Tamanho da fonte */
+            font-weight: 700; /* Negrito */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            letter-spacing: 0.1em; /* Espaçamento entre as letras */
+            display: flex; /* Para que as letras fiquem lado a lado e o espaçamento funcione */
+            margin-top: 20px; /* Espaço entre o spinner e a logo */
+        }
+
+        /* Estilo para cada letra individualmente */
+        .phal-tech-logo .letter {
+            color: var(--text-color-primary); /* Letras pretas ou brancas, dependendo do tema */
+            transition: color 0.3s ease; /* Para transições suaves se as cores mudarem */
+            display: inline-block; /* Necessário para aplicar transformações */
+            animation: jump 1.2s infinite ease-in-out; /* Animação de pulo para todas as letras */
+        }
+
+        /* Atrasos para a animação de pulo para criar o efeito sequencial */
+        .phal-tech-logo .letter:nth-child(1) { animation-delay: 0.0s; } /* P */
+        .phal-tech-logo .letter:nth-child(2) { animation-delay: 0.1s; } /* H */
+        .phal-tech-logo .letter:nth-child(3) { animation-delay: 0.2s; } /* A */
+        .phal-tech-logo .letter:nth-child(4) { animation-delay: 0.3s; } /* L */
+        .phal-tech-logo .letter:nth-child(5) { animation-delay: 0.4s; } /* Espaço */
+        .phal-tech-logo .letter:nth-child(6) { animation-delay: 0.5s; } /* T */
+        .phal-tech-logo .letter:nth-child(7) { animation-delay: 0.6s; } /* E */
+        .phal-tech-logo .letter:nth-child(8) { animation-delay: 0.7s; } /* C */
+        .phal-tech-logo .letter:nth-child(9) { animation-delay: 0.8s; } /* H */
+
+        /* Estilo específico para a letra 'C' */
+        .phal-tech-logo .green-c {
+            color: #22c55e; /* Verde vibrante (Tailwind green-500) */
+            /* A animação 'pulse' é combinada com 'jump' */
+            /* Sincronizando a duração e o atraso da pulsação com o pulo */
+            animation: jump 1.2s infinite ease-in-out 0.7s, pulse 1.2s infinite ease-in-out 0.7s;
+        }
+
+        /* Animação de pulsação para a letra 'C' */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; } /* Pisca diminuindo a opacidade */
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Animação de pulo para as letras */
+        @keyframes jump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); } /* Pula 10px para cima */
+        }
+
+        /* Estilo para o spinner de carregamento */
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid var(--border-color); /* Cor da borda base (cinza claro ou escuro) */
+            border-top: 8px solid #22c55e; /* Cor da borda superior (verde, combinando com o 'C') */
+            border-radius: 50%; /* Transforma em círculo */
+            animation: spin 1.2s linear infinite; /* Aplica a animação 'spin' */
+        }
+
+        /* Animação de rotação para o spinner */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Estilo para a cor verde metálico da letra 'C' e da lupa */
@@ -108,6 +210,7 @@
             display: flex; /* Adicionado para alinhar input e botão */
             align-items: center; /* Alinha verticalmente */
             gap: 8px; /* Espaçamento entre input e botão */
+            position: relative; /* Para posicionar as sugestões */
         }
 
         .search-input {
@@ -119,7 +222,8 @@
             flex-grow: 1; /* Permite que o input preencha o espaço */
         }
 
-        .search-input:hover {
+        .search-input:focus {
+            outline: none;
             border-color: var(--metallic-green); /* Usando variável de tema */
             box-shadow: 0 0 0 3px var(--highlight-bg); /* Usando variável de tema */
         }
@@ -148,6 +252,49 @@
             color: white; /* Cor da lupa branca no botão */
             width: 20px; /* Tamanho do ícone */
             height: 20px; /* Tamanho do ícone */
+        }
+
+        /* Estilos para as sugestões de pesquisa */
+        .suggestions-list {
+            position: absolute;
+            top: 100%; /* Posição abaixo do input */
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.5); /* Fundo mais translúcido para tema claro (opacidade 0.5) */
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 0.5rem 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Sombra ajustada para translucidez */
+            z-index: 20; /* Acima de outros elementos */
+            max-height: 200px;
+            overflow-y: auto;
+            display: none; /* Inicia oculto */
+        }
+
+        body.dark-theme .suggestions-list {
+            background-color: rgba(45, 55, 72, 0.5); /* Fundo mais translúcido para tema escuro (opacidade 0.5) */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); /* Sombra ajustada para translucidez no tema escuro */
+        }
+
+        .suggestions-list.show {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            color: var(--text-color-primary);
+            transition: background-color 0.2s ease;
+        }
+
+        .suggestion-item:hover, .suggestion-item.active {
+            background-color: var(--card-bg);
+        }
+
+        .suggestion-item .highlight-suggestion {
+            background-color: var(--highlight-bg); /* Verde para o destaque */
+            border-radius: 0.2rem;
+            padding: 0 2px;
         }
 
 
@@ -189,7 +336,7 @@
         }
 
         .cascade-menu-button:hover {
-            background-color: var(--metallic-green-hover); /* Usando variável de tema */
+            background-color: var(--metallic-green-hover);
             box-shadow: 0 4px 8px var(--shadow-color); /* Usando variável de tema */
         }
 
@@ -260,16 +407,38 @@
         main section p, main section ul, main section li {
             color: var(--text-color-secondary); /* Usando variável de tema */
         }
-        main section .bg-gray-50 { /* Para os cartões internos de serviço/contato/sobre */
+        main section .service-card { /* Para os cartões internos de serviço/contato/sobre */
             background-color: var(--card-bg); /* Usando variável de tema */
             box-shadow: 0 2px 4px var(--shadow-color-light); /* Usando variável de tema */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transição para a animação de hover */
         }
-        main section .bg-gray-50 h3 {
+        main section .service-card:hover {
+            transform: translateY(-5px) scale(1.02); /* Levemente para cima e expande */
+            box-shadow: 0 8px 16px -2px var(--shadow-color); /* Sombra mais pronunciada */
+        }
+        main section .service-card h3 {
             color: var(--text-color-primary); /* Usando variável de tema */
         }
-        main section .bg-gray-50 p {
+        main section .service-card p {
             color: var(--text-color-secondary); /* Usando variável de tema */
+            text-align: justify; /* Texto justificado */
         }
+
+        /* Estilo para os itens da lista de valores em "Sobre Nós" e para as seções de Missão e Visão */
+        .about-us-item { /* Renomeado para ser mais genérico */
+            background-color: var(--card-bg); /* Fundo similar aos cartões de serviço */
+            padding: 12px 16px; /* Padding interno */
+            border-radius: 0.75rem; /* Cantos arredondados */
+            margin-bottom: 16px; /* Espaçamento entre os itens */
+            box-shadow: 0 2px 4px var(--shadow-color-light); /* Sombra suave */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transição para a animação de hover */
+        }
+
+        .about-us-item:hover {
+            transform: translateY(-3px) scale(1.01); /* Levemente para cima e expande */
+            box-shadow: 0 4px 8px var(--shadow-color); /* Sombra mais pronunciada */
+        }
+
 
         /* Estilo para o formulário de contato */
         .contact-form input[type="text"],
@@ -309,6 +478,13 @@
             background-color: var(--metallic-green-hover); /* Usando variável de tema */
             box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color-light); /* Usando variável de tema */
         }
+        /* Estilo para o botão de envio desabilitado */
+        .contact-form button[type="submit"]:disabled {
+            background-color: #cccccc; /* Cor cinza para desabilitado */
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
 
         /* Estilo para os botões de redes sociais */
         .social-button {
@@ -326,7 +502,7 @@
         }
 
         .social-button:hover {
-            background-color: var(--metallic-green-hover); /* Usando variável de tema */
+            background-color: var(--metallic-green-hover);
             box-shadow: 0 4px 8px var(--shadow-color); /* Usando variável de tema */
         }
 
@@ -347,26 +523,26 @@
             transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
             border: 1px solid var(--border-color); /* Adicionado borda para consistência */
             background-color: var(--input-bg); /* Fundo padrão */
+            color: var(--text-color-primary); /* A cor do emoji agora se adapta ao tema */
+            padding: 8px 12px; /* Ajusta o padding para ícones */
+            font-size: 1.5rem; /* Aumenta o tamanho da fonte para os emojis */
+            line-height: 1; /* Garante que o emoji não adicione altura extra */
+            border-radius: 9999px; /* Totalmente arredondado */
+            cursor: pointer;
             display: flex; /* Para alinhar o SVG */
             align-items: center; /* Centraliza verticalmente */
-            justify-content: center; /* Centraliza horizontalmente */
-            padding: 8px; /* Ajusta o padding para ícones */
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .theme-switcher button svg {
-            width: 24px; /* Ajuste o tamanho do ícone */
-            height: 24px; /* Ajuste o tamanho do ícone */
-            color: var(--text-color-primary); /* Cor do ícone */
+        .theme-switcher button:hover {
+            background-color: var(--card-bg); /* Fundo ao passar o mouse */
         }
 
-        /* Estilo para o botão de tema ativo */
         .theme-switcher button.active {
             background-color: var(--metallic-green);
             border-color: var(--metallic-green);
-        }
-
-        .theme-switcher button.active svg {
-            color: white; /* Ícone branco quando o botão está ativo */
+            color: white; /* O emoji do botão ativo ficará branco no fundo verde */
         }
 
         /* Ajustes para telas menores */
@@ -414,10 +590,31 @@
                 width: 100%; /* Input ocupa largura total */
                 margin-bottom: 8px; /* Espaçamento entre input e botão */
             }
+            .theme-switcher button {
+                font-size: 1.2rem; /* Ajusta o tamanho do emoji em telas menores */
+            }
         }
     </style>
 </head>
-<body>
+<body class="loading">
+    <!-- Container da Animação de Carregamento -->
+    <div id="loaderOverlay" class="loader-overlay">
+        <!-- Spinner de carregamento verde -->
+        <div class="spinner"></div>
+        <!-- Logo PHAL TECH com a letra 'C' verde e animada -->
+        <div class="phal-tech-logo">
+            <span class="letter">P</span>
+            <span class="letter">H</span>
+            <span class="letter">A</span>
+            <span class="letter">L</span>
+            <span class="letter">&nbsp;</span> <!-- Espaço entre PHAL e TECH -->
+            <span class="letter">T</span>
+            <span class="letter">E</span>
+            <span class="letter green-c">C</span> <!-- A letra 'C' com estilo verde e animação -->
+            <span class="letter">H</span>
+        </div>
+    </div>
+
     <!-- Header Section -->
     <header class="tumb-container">
         <!-- Linha superior da TUMB (Logo, Pesquisa, Calendário) -->
@@ -437,8 +634,10 @@
                     <!-- Ícone de Lupa em SVG -->
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+                        </svg>
                 </button>
+                <!-- Lista de sugestões de pesquisa -->
+                <div id="suggestionsList" class="suggestions-list"></div>
             </div>
 
             <!-- Right Section: Date and Time -->
@@ -467,19 +666,20 @@
                 <!-- Theme Switcher Buttons -->
                 <div class="theme-switcher flex gap-2">
                     <button id="lightThemeBtn" class="px-3 py-1 rounded-full text-sm font-semibold border" aria-label="Ativar Tema Claro">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.106a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.06l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5h2.25a.75.75 0 0 1 .75.75ZM17.243 18.894a.75.75 0 0 0 1.06 1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18.75a.75.75 0 0 1-.75.75v2.25a.75.75 0 0 1 1.5 0v-2.25a.75.75 0 0 1-.75-.75ZM5.56 17.243a.75.75 0 0 0-1.06-1.06l-1.59 1.591a.75.75 0 0 0 1.06 1.06l1.591-1.59ZM3 12a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM6.106 5.56a.75.75 0 0 0 1.06-1.061l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.591 1.59Z" />
-                        </svg>
+                        ☀︎ <!-- Emoji de Sol -->
                     </button>
                     <button id="darkThemeBtn" class="px-3 py-1 rounded-full text-sm font-semibold border" aria-label="Ativar Tema Escuro">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .482.832l-1.096 4.415c.811.22 1.58.583 2.272 1.068a7.046 7.046 0 0 0 3.293 1.834 7.046 7.046 0 0 1 .91-2.923c.27-.602.864-1.035 1.571-1.171.493-.094.997.061 1.42.368A7.012 7.012 0 0 0 21.75 12a7.002 7.002 0 0 1-13.565 3.197c-.014.024-.029.049-.042.074a.75.75 0 1 1-1.121-.796 5.485 5.485 0 0 0 2.222-1.084 5.5 5.5 0 0 0 1.565-3.048 5.508 5.508 0 0 0-.256-1.745l-1.096 4.415a.75.75 0 0 1-1.401-.345l-1.096-4.415a.75.75 0 0 1 .832-.482ZM12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM4.922 6.106a.75.75 0 1 0 1.06 1.06l1.591-1.59a.75.75 0 1 0-1.06-1.06l-1.591 1.59ZM18.75 12a.75.75 0 0 1 .75-.75h2.25a.75.75 0 0 1 0 1.5h-2.25a.75.75 0 0 1-.75-.75ZM17.243 18.894a.75.75 0 0 0 1.06 1.06l1.591-1.59a.75.75 0 0 0-1.06-1.06l-1.591 1.59ZM12 18.75a.75.75 0 0 1-.75.75v2.25a.75.75 0 0 1 1.5 0v-2.25a.75.75 0 0 1-.75-.75ZM5.56 17.243a.75.75 0 0 0-1.06-1.06l-1.59 1.591a.75.75 0 0 0 1.06 1.06l1.591-1.59ZM3 12a.75.75 0 0 1-.75.75H.75a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75Z" clip-rule="evenodd" />
-                        </svg>
+                        ☾ <!-- Emoji de Lua Minguante -->
                     </button>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- Adicione este div para a notificação de sucesso/erro -->
+    <div id="notificationMessage" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-xl text-center z-[100] transition-all duration-300 ease-in-out" style="min-width: 300px;">
+        <p id="notificationText" class="font-semibold"></p>
+    </div>
 
     <!-- Main Content -->
     <main>
@@ -487,45 +687,30 @@
         <section id="services-page" class="hidden-content-page">
             <h2 class="text-4xl font-bold text-center mb-8">Nossos Serviços</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Serviço 1: Consultoria em TI -->
-                <div class="p-6 rounded-lg shadow-sm">
-                    <h3 class="text-2xl font-semibold mb-2">Consultoria em TI</h3>
-                    <p>Oferecemos consultoria especializada para otimizar seus processos de TI, identificar oportunidades de melhoria e implementar soluções tecnológicas eficientes.</p>
-                </div>
-                <!-- Serviço 2: Desenvolvimento de Software -->
-                <div class="p-6 rounded-lg shadow-sm">
-                    <h3 class="text-2xl font-semibold mb-2">Desenvolvimento de Software</h3>
-                    <p>Criamos softwares personalizados para web, mobile e desktop, atendendo às necessidades específicas do seu negócio com tecnologia de ponta.</p>
-                </div>
-                <!-- Serviço 3: Suporte Técnico -->
-                <div class="p-6 rounded-lg shadow-sm">
+                <!-- Serviço 1: Suporte Técnico -->
+                <div class="p-6 rounded-lg shadow-sm service-card">
                     <h3 class="text-2xl font-semibold mb-2">Suporte Técnico</h3>
-                    <p>Disponibilizamos suporte técnico remoto e local para garantir o funcionamento contínuo dos seus sistemas e resolver problemas rapidamente.</p>
+                    <p>Oferecemos suporte técnico especializado, tanto remoto quanto local, para garantir o funcionamento contínuo dos seus sistemas. Resolvemos problemas rapidamente, minimizando interrupções e mantendo sua operação sempre ativa.</p>
                 </div>
-                <!-- Serviço 4: Redes e Infraestrutura -->
-                <div class="p-6 rounded-lg shadow-sm">
-                    <h3 class="text-2xl font-semibold mb-2">Redes e Infraestrutura</h3>
-                    <p>Projetamos, implementamos e gerenciamos redes e infraestruturas de TI robustas e seguras para sua empresa.</p>
+                <!-- Serviço 2: Consultoria em TI -->
+                <div class="p-6 rounded-lg shadow-sm service-card">
+                    <h3 class="text-2xl font-semibold mb-2">Consultoria em TI</h3>
+                    <p>Nossa consultoria em TI é estratégica, focada em otimizar seus processos e identificar oportunidades de melhoria. Implementamos soluções tecnológicas eficientes que impulsionam o crescimento e a inovação do seu negócio.</p>
                 </div>
-                <!-- Serviço 5: Segurança da Informação -->
-                <div class="p-6 rounded-lg shadow-sm">
-                    <h3 class="text-2xl font-semibold mb-2">Segurança da Informação</h3>
-                    <p>Protegemos seus dados e sistemas contra ameaças cibernéticas com soluções avançadas de segurança da informação.</p>
+                <!-- Serviço 3: Otimização de Sistemas -->
+                <div class="p-6 rounded-lg shadow-sm service-card">
+                    <h3 class="text-2xl font-semibold mb-2">Otimização de Sistemas</h3>
+                    <p>Através da otimização de sistemas, aprimoramos o desempenho e a eficiência da sua infraestrutura existente. Garantimos que seus sistemas operem no máximo potencial, resultando em maior produtividade e, muitas vezes, na redução de custos operacionais.</p>
                 </div>
-                <!-- Serviço 6: Backup e Recuperação de Dados -->
-                <div class="p-6 rounded-lg shadow-sm">
+                <!-- Serviço 4: Backup e Recuperação de Dados -->
+                <div class="p-6 rounded-lg shadow-sm service-card">
                     <h3 class="text-2xl font-semibold mb-2">Backup e Recuperação de Dados</h3>
-                    <p>Garanta a segurança dos seus dados com nossas soluções de backup e recuperação, minimizando riscos de perda de informações.</p>
+                    <p>Com nossas soluções de backup e recuperação de dados, você garante a segurança e a integridade das suas informações mais valiosas. Minimizamos os riscos de perda de dados e oferecemos a tranquilidade de uma recuperação eficiente em qualquer cenário.</p>
                 </div>
-                <!-- Serviço 7: Cloud Computing -->
-                <div class="p-6 rounded-lg shadow-sm">
-                    <h3 class="text-2xl font-semibold mb-2">Cloud Computing</h3>
-                    <p>Migre para a nuvem com segurança e eficiência, aproveitando os benefícios da computação em nuvem para seu negócio.</p>
-                </div>
-                <!-- Serviço 8: Otimização de Sistemas -->
-                <div class="p-6 rounded-lg shadow-sm">
-                    <h3 class="2xl font-semibold mb-2">Otimização de Sistemas</h3>
-                    <p>Melhoramos o desempenho e a eficiência dos seus sistemas existentes, garantindo que sua infraestrutura opere no máximo potencial.</p>
+                <!-- Serviço 5: Desenvolvimento de Sites -->
+                <div class="p-6 rounded-lg shadow-sm service-card">
+                    <h3 class="text-2xl font-semibold mb-2">Desenvolvimento de Sites</h3>
+                    <p>Desenvolvemos websites modernos e responsivos que não apenas atendem às suas necessidades, mas também destacam sua presença online. Focamos em design intuitivo e experiência do usuário para garantir que seu site seja uma ferramenta poderosa para o seu negócio.</p>
                 </div>
             </div>
         </section>
@@ -534,18 +719,27 @@
         <section id="about-us-page" class="hidden-content-page">
             <h2 class="text-4xl font-bold text-center mb-8">Sobre Nós</h2>
             <div class="p-6 rounded-lg shadow-sm">
-                <h3 class="text-2xl font-semibold mb-4">Nossa Missão</h3>
-                <p class="mb-4">Na PHAL TECH, nossa missão é impulsionar o sucesso de nossos clientes através de soluções tecnológicas inovadoras e eficientes. Acreditamos que a tecnologia, quando bem aplicada, pode transformar negócios e simplificar a vida das pessoas.</p>
-                <h3 class="text-2xl font-semibold mb-4">Nossa Visão</h3>
-                <p class="mb-4">Ser reconhecida como líder em soluções de TI, referência em inovação e excelência no atendimento, construindo parcerias duradouras baseadas na confiança e resultados.</p>
-                <h3 class="2xl font-semibold mb-4">Nossos Valores</h3>
-                <ul class="list-disc list-inside">
-                    <li>**Inovação:** Buscamos constantemente novas tecnologias e abordagens para oferecer as melhores soluções.</li>
-                    <li>**Qualidade:** Comprometimento com a entrega de serviços e produtos de alta qualidade.</li>
-                    <li>**Integridade:** Atuamos com ética, transparência e responsabilidade em todas as nossas relações.</li>
-                    <li>**Foco no Cliente:** Entender e superar as expectativas de nossos clientes é a nossa prioridade.</li>
-                    <li>**Colaboração:** Acreditamos no poder do trabalho em equipe e na troca de conhecimentos.</li>
-                </ul>
+                <!-- Missão -->
+                <div class="about-us-item">
+                    <h3 class="text-2xl font-semibold mb-4">💡 Nossa Missão</h3>
+                    <p class="mb-4 text-align-justify">Na PHAL TECH, nossa missão é transformar desafios em soluções tecnológicas inteligentes. Trabalhamos para potencializar o crescimento dos nossos clientes, tornando seus processos mais simples, ágeis e eficientes. Acreditamos que a tecnologia deve ser uma aliada estratégica para facilitar o dia a dia e impulsionar resultados reais.</p>
+                </div>
+                <!-- Visão -->
+                <div class="about-us-item">
+                    <h3 class="text-2xl font-semibold mb-4">🚀 Nossa Visão</h3>
+                    <p class="mb-4 text-align-justify">Queremos ser reconhecidos como uma referência nacional em soluções de TI, destacando-nos pela inovação, qualidade e relacionamento próximo com cada cliente. Buscamos construir parcerias sólidas e duradouras, sempre baseadas na confiança, na transparência e na entrega de valor.</p>
+                </div>
+                <!-- Valores -->
+                <div class="about-us-item"> <!-- A classe 'about-us-item' foi movida para o div que envolve toda a lista -->
+                    <h3 class="text-2xl font-semibold mb-4">🔑 Nossos Valores</h3>
+                    <ul class="list-disc list-inside">
+                        <li class="text-align-justify">Inovação contínua: Estamos sempre em movimento, acompanhando as tendências e aplicando o que há de mais moderno em tecnologia.</li>
+                        <li class="text-align-justify">Excelência em tudo que fazemos: Qualidade é o nosso padrão, desde o primeiro atendimento até a entrega final.</li>
+                        <li class="text-align-justify">Ética e responsabilidade: Agimos com integridade, respeitando clientes, parceiros e o impacto do nosso trabalho.</li>
+                        <li class="text-align-justify">Cliente no centro: Suas necessidades são a nossa prioridade. Ouvimos, entendemos e entregamos soluções que superam expectativas.</li>
+                        <li class="text-align-justify">Espírito colaborativo: Sabemos que os melhores resultados vêm do trabalho em equipe e da troca de ideias.</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -554,7 +748,9 @@
             <h2 class="text-4xl font-bold text-center mb-8">Contatos</h2>
             <div class="p-6 rounded-lg shadow-sm mb-8">
                 <h3 class="text-2xl font-semibold mb-4">Envie-nos uma Mensagem</h3>
-                <form class="contact-form" action="/submit-contact" method="POST" role="form" aria-labelledby="contact-form-heading">
+                <!-- A tag <form> foi atualizada para apontar para um endpoint de backend. -->
+                <!-- Você precisará de um servidor (ex: Flask, Node.js) para processar este formulário. -->
+                <form class="contact-form" id="contactForm" action="/submit-contact" method="POST" role="form" aria-labelledby="contact-form-heading">
                     <h4 id="contact-form-heading" class="sr-only">Formulário de Contato</h4>
                     <label for="contact-name" class="block text-sm font-bold mb-2">Seu Nome:</label>
                     <input type="text" id="contact-name" name="name" placeholder="Seu Nome" required>
@@ -569,7 +765,9 @@
                     <textarea id="contact-message" name="message" placeholder="Sua Mensagem" rows="5" required></textarea>
 
                     <input type="text" name="honeypot" style="display: none;" aria-hidden="true">
-                    <button type="submit">Enviar Mensagem</button>
+                    <button type="submit" id="submitButton">Enviar Mensagem</button>
+                    <!-- Mensagem de status para o envio do formulário -->
+                    <p id="form-status" class="mt-4 text-center text-sm"></p>
                 </form>
             </div>
 
@@ -579,11 +777,11 @@
                     <a href="https://www.instagram.com/phaltech_informatica/" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="Instagram da PHAL TECH">
                         <i class="fab fa-instagram"></i> Instagram
                     </a>
-                    <a href="https://www.facebook.com/profile.php?id=61573097804524" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="Facebook da PHAL TECH">
-                        <i class="fab fa-facebook-f"></i> Facebook
-                    </a>
                     <a href="https://wa.me/5511952387921" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="WhatsApp da PHAL TECH">
                         <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61573097804524" target="_blank" rel="noopener noreferrer" class="social-button" aria-label="Facebook da PHAL TECH">
+                        <i class="fab fa-facebook"></i> Facebook
                     </a>
                 </div>
             </div>
@@ -595,7 +793,29 @@
         <p>&copy; 2025 PHAL TECH. Todos os direitos reservados.</p>
     </footer>
 
-    <script defer>
+    <!-- JavaScript incorporado -->
+    <script>
+        // Variáveis e funções do loader
+        const loaderOverlay = document.getElementById('loaderOverlay');
+        const body = document.body;
+
+        function showLoader() {
+            // Garante que o loader esteja visível imediatamente
+            loaderOverlay.style.opacity = '1';
+            loaderOverlay.style.visibility = 'visible';
+            body.classList.add('loading'); // Adiciona a classe para ativar as regras CSS de carregamento
+        }
+
+        function hideLoader() {
+            loaderOverlay.style.opacity = '0';
+            loaderOverlay.style.visibility = 'hidden';
+            // Remove a classe 'loading' do body APENAS após a transição de saída do loader terminar
+            loaderOverlay.addEventListener('transitionend', function handler() {
+                body.classList.remove('loading');
+                loaderOverlay.removeEventListener('transitionend', handler); // Remove o listener para evitar múltiplas execuções
+            }, { once: true }); // A opção 'once: true' garante que o listener seja removido automaticamente após a primeira execução
+        }
+
         // Função para atualizar a data e hora
         function updateDateTime() {
             const now = new Date();
@@ -621,13 +841,14 @@
         const cascadeDropdown = document.getElementById('cascadeDropdown');
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton'); // Novo botão de pesquisa
+        const suggestionsList = document.getElementById('suggestionsList'); // Elemento para a lista de sugestões
 
         // Referências para os links dentro do dropdown cascata
         const cascadeServicesLink = document.getElementById('cascadeServicesLink');
         const cascadeAboutUsLink = document.getElementById('cascadeAboutUsLink');
         const cascadeContactLink = document.getElementById('cascadeContactLink');
 
-        // Referências para os botões de tema
+        // Referências para os botões de tema (mantidos do site original)
         const lightThemeBtn = document.getElementById('lightThemeBtn');
         const darkThemeBtn = document.getElementById('darkThemeBtn');
 
@@ -636,21 +857,137 @@
         let originalAboutUsHtml;
         let originalContactHtml;
 
+        // Array de sugestões de pesquisa (pode ser expandido conforme necessário)
+        const searchSuggestions = [
+            "Suporte Técnico",
+            "Consultoria em TI",
+            "Otimização de Sistemas",
+            "Backup e Recuperação de Dados",
+            "Desenvolvimento de Sites",
+            "Nossa Missão",
+            "Nossa Visão",
+            "Nossos Valores",
+            "Contatos",
+            "Instagram",
+            "Facebook",
+            "WhatsApp"
+        ];
+
         document.addEventListener('DOMContentLoaded', () => {
+            showLoader(); // Mostra o loader imediatamente
+
+            // Captura o HTML original das páginas após o DOM estar carregado
             originalServicesHtml = servicesPage.innerHTML;
             originalAboutUsHtml = aboutUsPage.innerHTML;
             originalContactHtml = contactPage.innerHTML;
 
-            // Aplicar o tema salvo no localStorage ao carregar a página
+            // Aplica o tema salvo no localStorage ao carregar a página
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark-theme');
-                darkThemeBtn.classList.add('active'); // Marca o botão escuro como ativo
                 lightThemeBtn.classList.remove('active'); // Garante que o claro não esteja ativo
+                darkThemeBtn.classList.add('active'); // Marca o botão escuro como ativo
             } else {
                 document.body.classList.remove('dark-theme');
                 lightThemeBtn.classList.add('active'); // Marca o botão claro como ativo
                 darkThemeBtn.classList.remove('active'); // Garante que o escuro não esteja ativo
+            }
+
+            // Esconde o loader após um atraso para revelar o conteúdo principal
+            setTimeout(() => {
+                hideLoader();
+            }, 2500); // Tempo antes de iniciar a transição de saída do loader (2.5 segundos)
+
+
+            // Lógica para o envio do formulário para o backend Python
+            const form = document.getElementById('contactForm');
+            const formStatus = document.getElementById('form-status');
+            const submitButton = document.getElementById('submitButton'); // Referência ao botão de envio
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); // Previne o envio padrão do formulário
+
+                // 1. Exibir imediatamente a animação de carregamento
+                showLoader();
+
+                // Desabilita o botão e mostra mensagem de carregamento
+                submitButton.disabled = true;
+                submitButton.textContent = 'Enviando...';
+                formStatus.textContent = ''; // Limpa qualquer mensagem anterior
+                formStatus.style.color = ''; // Reseta a cor
+
+                console.log('Tentando enviar formulário...');
+
+                try {
+                    const formData = new FormData(form); // Cria um FormData a partir do formulário
+                    const response = await fetch(form.action, {
+                        method: form.method,
+                        body: formData, // Envia os dados do formulário como FormData
+                    });
+
+                    console.log('Resposta do servidor:', response);
+
+                    // A resposta do servidor agora é um redirecionamento, não um JSON
+                    // O navegador seguirá o redirecionamento automaticamente.
+                    // Não precisamos mais processar JSON aqui para sucesso/erro.
+                    // A notificação será tratada na recarga da página pelo parâmetro da URL.
+
+                } catch (error) {
+                    // Mensagem de erro de rede (se o fetch falhar completamente)
+                    formStatus.textContent = 'Ocorreu um erro de rede. Por favor, verifique sua conexão e tente novamente.';
+                    formStatus.style.color = '#ef4444'; // Cor vermelha para erro
+                    console.error('Erro de rede ao enviar formulário:', error);
+                    // 2. Voltar automaticamente para o topo do site
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // 3. Esconder o loader
+                    hideLoader();
+                    // 4. Limpar a mensagem de status após alguns segundos
+                    setTimeout(() => {
+                        formStatus.textContent = '';
+                        formStatus.style.color = '';
+                    }, 5000); // Mensagem some após 5 segundos
+                    // Reabilita o botão e restaura o texto original
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Enviar Mensagem';
+                }
+            });
+
+            // Lógica para exibir a notificação ao carregar a página
+            const urlParams = new URLSearchParams(window.location.search);
+            const successParam = urlParams.get('success');
+            const errorParam = urlParams.get('error');
+            const notificationMessage = document.getElementById('notificationMessage');
+            const notificationText = document.getElementById('notificationText');
+
+            if (notificationMessage && notificationText) {
+                if (successParam === 'true') {
+                    notificationText.textContent = 'Mensagem enviada com sucesso! Em breve entraremos em contato.';
+                    notificationMessage.className = 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-xl text-center z-[100] bg-green-500 text-white transition-all duration-300 ease-in-out';
+                    notificationMessage.classList.remove('hidden');
+                    // Opcional: Remover o parâmetro da URL após exibição para uma URL mais limpa
+                    history.replaceState({}, document.title, window.location.pathname);
+                    setTimeout(() => {
+                        notificationMessage.classList.add('hidden');
+                    }, 8000); // Esconde a notificação após 8 segundos (aumentado)
+                } else if (errorParam) {
+                    let errorMessage = 'Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.';
+                    if (errorParam === 'sendgrid_failed') {
+                        errorMessage = 'Erro no envio da mensagem via SendGrid. Por favor, verifique seus dados e tente novamente.';
+                    } else if (errorParam === 'unexpected_error') {
+                        errorMessage = 'Ocorreu um erro interno ao enviar a mensagem. Por favor, tente mais tarde.';
+                    } else if (errorParam === 'missing_fields') {
+                        errorMessage = 'Todos os campos do formulário são obrigatórios. Por favor, preencha-os.';
+                    } else if (errorParam === 'invalid_email') {
+                        errorMessage = 'O formato do e-mail é inválido. Por favor, insira um e-mail válido.';
+                    }
+                    notificationText.textContent = errorMessage;
+                    notificationMessage.className = 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-xl text-center z-[100] bg-red-500 text-white transition-all duration-300 ease-in-out';
+                    notificationMessage.classList.remove('hidden');
+                    history.replaceState({}, document.title, window.location.pathname);
+                    setTimeout(() => {
+                        notificationMessage.classList.add('hidden');
+                    }, 10000); // Esconde a notificação de erro após 10 segundos (aumentado)
+                }
             }
         });
 
@@ -672,6 +1009,7 @@
             hideAllContentPages(); // Esconde todas as outras páginas e restaura o conteúdo original
             cascadeDropdown.classList.remove('show'); // Esconde o dropdown cascata
             searchInput.value = ''; // Limpa a caixa de pesquisa ao navegar
+            suggestionsList.classList.remove('show'); // Esconde as sugestões ao navegar
 
             // Mostra a página desejada
             pageToShow.classList.remove('hidden-content-page');
@@ -764,6 +1102,7 @@
 
             hideAllContentPages(); // Esconde todas as páginas de conteúdo primeiro
             cascadeDropdown.classList.remove('show'); // Garante que o dropdown cascata esteja fechado durante a pesquisa
+            suggestionsList.classList.remove('show'); // Esconde as sugestões ao realizar a pesquisa completa
 
             if (searchTerm === '') {
                 // Se o termo de pesquisa estiver vazio, apenas esconde todas as páginas e retorna
@@ -803,30 +1142,91 @@
             }
         }
 
+        // Função para gerar e exibir sugestões
+        function showSuggestions() {
+            const input = searchInput.value.toLowerCase();
+            suggestionsList.innerHTML = ''; // Limpa as sugestões anteriores
+
+            if (input.length === 0) {
+                suggestionsList.classList.remove('show');
+                return;
+            }
+
+            const filteredSuggestions = searchSuggestions.filter(suggestion =>
+                suggestion.toLowerCase().includes(input)
+            );
+
+            if (filteredSuggestions.length > 0) {
+                filteredSuggestions.forEach(suggestion => {
+                    const item = document.createElement('div');
+                    item.classList.add('suggestion-item');
+
+                    // Destaca a parte da sugestão que corresponde ao input
+                    const regex = new RegExp(input, 'gi');
+                    item.innerHTML = suggestion.replace(regex, match => `<span class="highlight-suggestion">${match}</span>`);
+
+                    item.addEventListener('click', () => {
+                        searchInput.value = suggestion;
+                        performSearch(); // Executa a pesquisa com a sugestão selecionada
+                        suggestionsList.classList.remove('show');
+                    });
+                    suggestionsList.appendChild(item);
+                });
+                suggestionsList.classList.add('show');
+            } else {
+                suggestionsList.classList.remove('show');
+            }
+        }
+
+        // Adiciona event listener para o input de pesquisa para mostrar sugestões
+        searchInput.addEventListener('input', showSuggestions);
+
         // Adiciona o event listener para o novo botão de pesquisa
-        searchButton.addEventListener('click', performSearch);
+        searchButton.addEventListener('click', function() {
+            showLoader(); // Mostra o loader
+            setTimeout(() => {
+                performSearch(); // Executa a pesquisa após o delay
+                hideLoader(); // Esconde o loader
+            }, 2500); // Tempo de espera para a animação do loader
+        });
 
         // Adiciona o event listener para a tecla Enter no campo de pesquisa
         searchInput.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
-                performSearch();
+                showLoader(); // Mostra o loader
+                setTimeout(() => {
+                    performSearch(); // Executa a pesquisa após o delay
+                    hideLoader(); // Esconde o loader
+                }, 2500); // Tempo de espera para a animação do loader
             }
         });
 
         // Event listeners para os links dentro do dropdown cascata
         cascadeServicesLink.addEventListener('click', function(event) {
             event.preventDefault(); // Previne o comportamento padrão do link
-            showContentPage(servicesPage);
+            showLoader(); // Mostra o loader
+            setTimeout(() => {
+                showContentPage(servicesPage);
+                hideLoader(); // Esconde o loader
+            }, 2500); // Tempo de espera para a animação do loader
         });
 
         cascadeAboutUsLink.addEventListener('click', function(event) {
             event.preventDefault(); // Previne o comportamento padrão do link
-            showContentPage(aboutUsPage);
+            showLoader(); // Mostra o loader
+            setTimeout(() => {
+                showContentPage(aboutUsPage);
+                hideLoader(); // Esconde o loader
+            }, 2500); // Tempo de espera para a animação do loader
         });
 
         cascadeContactLink.addEventListener('click', function(event) {
             event.preventDefault(); // Previne o comportamento padrão do link
-            showContentPage(contactPage);
+            showLoader(); // Mostra o loader
+            setTimeout(() => {
+                showContentPage(contactPage);
+                hideLoader(); // Esconde o loader
+            }, 2500); // Tempo de espera para a animação do loader
         });
 
         // Lógica para o novo botão de menu cascata
@@ -834,25 +1234,38 @@
             event.stopPropagation(); // Impede que o clique se propague para o window e feche o dropdown imediatamente
             cascadeDropdown.classList.toggle('show');
             searchInput.value = ''; // Limpa a caixa de pesquisa ao abrir o menu cascata
+            suggestionsList.classList.remove('show'); // Esconde as sugestões ao abrir o menu cascata
         });
 
         // Adiciona a funcionalidade de voltar ao topo para o link PHAL TECH
         phalTechLink.addEventListener('click', function(event) {
             event.preventDefault(); // Previne o comportamento padrão do link
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth' // Rolagem suave
-            });
-            hideAllContentPages(); // Esconde todas as páginas de conteúdo
-            cascadeDropdown.classList.remove('show'); // Esconde o dropdown cascata
-            searchInput.value = ''; // Limpa a caixa de pesquisa ao voltar para o topo
+
+            showLoader(); // Mostra o loader ao clicar no botão PHAL TECH
+
+            // Atraso para as ações do botão PHAL TECH ocorrerem após a animação do loader
+            // O loader ficará visível por 2.5 segundos antes de iniciar a transição de saída de 0.5 segundos.
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // Rolagem suave
+                });
+                hideAllContentPages(); // Esconde todas as páginas de conteúdo
+                cascadeDropdown.classList.remove('show'); // Esconde o dropdown cascata
+                searchInput.value = ''; // Limpa a caixa de pesquisa ao voltar para o topo
+                suggestionsList.classList.remove('show'); // Esconde as sugestões ao voltar para o topo
+                hideLoader(); // Inicia a transição de saída do loader
+            }, 2500); // Tempo antes de iniciar a transição de saída do loader (2.5 segundos)
         });
 
-        // Fecha o dropdown cascata se o usuário clicar fora dele
+        // Fecha o dropdown cascata e as sugestões de pesquisa se o usuário clicar fora deles
         window.addEventListener("click", function(event) {
             if (!event.target.matches('#cascadeMenuButton') && !event.target.closest('.cascade-menu-wrapper') && !event.target.closest('.theme-switcher') && !event.target.matches('#searchButton') && !event.target.closest('.search-container')) {
                 if (cascadeDropdown.classList.contains('show')) {
                     cascadeDropdown.classList.remove('show');
+                }
+                if (suggestionsList.classList.contains('show')) {
+                    suggestionsList.classList.remove('show');
                 }
             }
         });
@@ -882,3 +1295,4 @@
     </script>
 </body>
 </html>
+�
